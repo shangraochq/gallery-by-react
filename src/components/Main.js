@@ -3,6 +3,7 @@ require('styles/App.scss');
 
 import React from 'react';
 
+
 //获得图片的数据
 var imageDatas = require('../data/imageDatas.json');
 
@@ -11,7 +12,7 @@ var imageDatas = (function getImgUrl(imageDatasArr){
 	var j = imageDatasArr.length;
 	for(var i = 0; i < j; i++){
 		var singleImgData = imageDatasArr[i];
-		singleImgData.imageUrl = require('../images/' + singleImgData.fileName);
+		singleImgData.imageURL = require('../images/' + singleImgData.fileName);
 		imageDatasArr[i] = singleImgData;
 
 	}
@@ -21,10 +22,10 @@ var imageDatas = (function getImgUrl(imageDatasArr){
 
 var ImgFigure = React.createClass({
   render: function(){
-    return <figure>
-              <img src = {this.data.props.imageURL} alt = {this.data.props.title}/>
+    return <figure className = "img-figure">
+              <img src = {this.props.data.imageURL} alt = {this.props.data.title}/>
               <figcaption>
-                <h2>
+                <h2 className = "img-title">
                   {this.props.data.title}
                 </h2>
               </figcaption>
@@ -32,29 +33,17 @@ var ImgFigure = React.createClass({
   }
 })
 
-var Gallery = React.createClass({
+var App = React.createClass({
 
   render: function(){
     var controllerUnits = [],
         imgFigures = [];
-    imageDatas.forEach(function (value, index) {
+    imageDatas.forEach(function (value) {
 
-        if (!this.state.imgsArrangeArr[index]) {
-            this.state.imgsArrangeArr[index] = {
-                pos: {
-                    left: 0,
-                    top: 0
-                },
-                rotate: 0,
-                isInverse: false,
-                isCenter: false
-            };
-        }
+        imgFigures.push(<ImgFigure data={value} />);
 
-        imgFigures.push(<ImgFigure key={index} data={value} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
-
-        controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
-    }.bind(this));
+        // controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
+    });
     return <section className = "stage">
               <section className = "img-sec">
                 {imgFigures}
@@ -62,11 +51,11 @@ var Gallery = React.createClass({
               <nav className = "controller-nav">
               </nav>
            </section>
-           
+    
   }
 });
 
-React.render(<Gallery />, document.getElementById('app'));
 
-module.exports = Gallery;
+
+module.exports = App;
 

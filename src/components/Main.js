@@ -67,6 +67,15 @@ var ImgFigure = React.createClass({
       }.bind(this));
     }
 
+    // 如果是居中的图片， z-index设为11
+        if (this.props.arrange.isCenter) {
+          styleObj.zIndex = 11;
+        }
+
+
+    var imgFigureClassName = 'img-figure';
+    imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+
     return <figure className = "img-figure" style = {styleObj} onClick = {this.handleClick}>
               <img src = {this.props.data.imageURL} alt = {this.props.data.title}/>
               <figcaption>
@@ -82,6 +91,39 @@ var ImgFigure = React.createClass({
            </figure>
   }
 })
+
+// 控制组件
+var ControllerUnit = React.createClass({
+    handleClick: function (e) {
+
+        // 如果点击的是当前正在选中态的按钮，则翻转图片，否则将对应的图片居中
+        if (this.props.arrange.isCenter) {
+            this.props.inverse();
+        } else {
+            this.props.center();
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+    },
+    render: function () {
+        var controlelrUnitClassName = "controller-unit";
+
+        // 如果对应的是居中的图片，显示控制按钮的居中态
+        if (this.props.arrange.isCenter) {
+            controlelrUnitClassName += " is-center";
+
+            // 如果同时对应的是翻转图片， 显示控制按钮的翻转态
+            if (this.props.arrange.isInverse) {
+                controlelrUnitClassName += " is-inverse";
+            }
+        }
+
+        return (
+            <span className={controlelrUnitClassName} onClick={this.handleClick}></span>
+        );
+    }
+});
 
 var App = React.createClass({
   Constant: {
@@ -192,8 +234,8 @@ var App = React.createClass({
     };
   },
 
-  inverse: function(index){
-    return function(){
+  inverse: function (index) {
+    return function () {
       var imgsArrangeArr = this.state.imgsArrangeArr;
 
       imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
@@ -204,8 +246,8 @@ var App = React.createClass({
     }.bind(this);
   },
 
-  center: function(index){
-    return function(){
+  center: function (index) {
+    return function () {
       this.rearrange(index);
     }.bind(this);
   },
@@ -263,15 +305,16 @@ var App = React.createClass({
             };
         }
 
-        imgFigures.push(<ImgFigure data={value} ref = {'imgFigure' + index} arrange = {this.state.imgsArrangeArr[index]} inverse = {this.inverse(index)} center = {this.center(index)}/>);
+        imgFigures.push(<ImgFigure key={index} data={value} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
 
-        // controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
+        controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
     }.bind(this));
     return <section className = "stage" ref="stage">
               <section className = "img-sec">
                 {imgFigures}
               </section>
               <nav className = "controller-nav">
+                {controllerUnits}
               </nav>
            </section>
     

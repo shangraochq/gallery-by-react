@@ -2,6 +2,6 @@
 --------------------------
 如需查看效果，请下载代码，在根目录下运行:
 
-	npm install;//现在项目所需依赖包
-	npm run serve;//运行项目
-	npm run build;//打包项目，生成静态文件
+	npm install; //下载项目所需依赖包
+	npm run serve; //运行项目
+	npm run build; //打包项目，生成静态文件

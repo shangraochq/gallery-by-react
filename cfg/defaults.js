@@ -46,7 +46,7 @@ function getDefaultModules() {
       },
       {
         test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
-        loader: 'url-loader?limit=8192'
+        loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
       },
       {
         test: /\.json$/,
@@ -62,7 +62,7 @@ function getDefaultModules() {
 
 module.exports = {
   srcPath: srcPath,
-  publicPath: '/assets/',
+  publicPath: 'dist/assets/',
   port: dfltPort,
   getDefaultModules: getDefaultModules
 };
